@@ -1,0 +1,13 @@
+argparse==1.2.1
+geopy==1.11.0
+numpy==1.11.0
+oauthlib==1.0.3
+pandas==0.18.0
+pyCLI==2.0.3
+python-dateutil==2.5.2
+pytz==2016.3
+requests==2.9.1
+requests-oauthlib==0.6.1
+six==1.10.0
+tweepy==3.5.0
+wsgiref==0.1.2
