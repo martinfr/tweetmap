@@ -4,7 +4,7 @@
 ## Installation
 
 ```shell
-https://github.com/martinfr/twitter-analytics.git
+git clone https://github.com/martinfr/twitter-analytics.git
 cd twitter-analytics
 virtualenv venv
 source venv/bin/activate
