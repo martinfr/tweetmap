@@ -5,6 +5,27 @@ from tweepy import OAuthHandler
 #Dataframe
 import pandas as pd
 
+#elasticsearch
+from elasticsearch import Elasticsearch
+
+
+class TweetAnalyzer:
+
+	def analyze(self, tweet):		
+
+		user_location = tweet.user.location 
+		user_timezone = tweet.user.time_zone
+		data = 	{
+			'text': tweet.text, 
+			'lang': tweet.lang, 
+			'user_location': user_location ,
+			'user_timezone':user_timezone, 
+			'created_at': tweet.created_at
+		}
+		
+		return data
+
+
 class TweetAnalytics:
 
 	def __init__(self, properties):
@@ -18,12 +39,22 @@ class TweetAnalytics:
 	def search(self, query, max=1000):
 
 		tweets_data = []
+		analyzer = TweetAnalyzer()
 
 		for tweet in tweepy.Cursor(self.api.search, q = query).items(max):
 		    
 		    if tweet.user and tweet.user.location:
-		      user_location = tweet.user.location 
-		      user_timezone = tweet.user.time_zone
-		      tweets_data.append({'text': tweet.text, 'lang': tweet.lang, 'user_location': user_location ,'user_timezone':user_timezone})
+		      tweets_data.append(analyzer.analyze(tweet))
 
 		return pd.DataFrame(data=tweets_data)
+
+	def index(self, query, max=1000):
+	
+		es = Elasticsearch()
+		analyzer = TweetAnalyzer()
+		
+		for tweet in tweepy.Cursor(self.api.search, q = query).items(max):
+			document = analyzer.analyze(tweet)
+            		es.create("tweets", "tweets", document)
+ 		
+	
